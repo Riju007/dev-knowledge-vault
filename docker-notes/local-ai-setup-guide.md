@@ -88,7 +88,10 @@ Model too big for RAM?     → ❌ Won't run at all
 3. Search for `qwen2.5`
 4. Find `qwen2.5:7B-Q4_0` and click **Pull**
 
-![Models Tab](https://placeholder/models)
+#### Sample Screenshot
+<img width="1668" height="857" alt="image" src="https://github.com/user-attachments/assets/1e9118bf-4f88-4f58-8548-ba7565994153" />
+
+
 
 > ⏳ This will download ~4GB. Make sure you have a good internet connection.
 
@@ -122,10 +125,13 @@ http://localhost:12434/engines/v1/models
 You should see a JSON response like:
 ```json
 {
+  "object": "list",
   "data": [
     {
-      "id": "ai/qwen2.5:7B-Q4_0",
-      "object": "model"
+      "id": "docker.io/ai/qwen2.5:7B-Q4_0",
+      "object": "model",
+      "created": 1745580818,
+      "owned_by": "docker"
     }
   ]
 }
@@ -141,6 +147,7 @@ Go to **Docker Desktop → Models → Requests tab** after sending a prompt.
 Duration: ~273ms  ← GPU is working! ⚡
 Duration: ~3000ms ← CPU only 🐢
 ```
+<img width="1662" height="515" alt="image" src="https://github.com/user-attachments/assets/091e9e33-7806-4612-ad52-9c906e708ff3" />
 
 ---
 
@@ -204,6 +211,8 @@ Can you explain what a Docker volume is?
 ```
 
 ✅ If it responds — **you're done!** You now have a free, private, GPU-accelerated AI coding assistant running 100% on your machine! 🎉
+
+<img width="1280" height="1216" alt="image" src="https://github.com/user-attachments/assets/d169eb2e-f3a9-4b9e-b6a9-d577056561db" />
 
 ---
 
