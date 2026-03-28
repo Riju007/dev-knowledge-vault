@@ -285,6 +285,8 @@ Solid and functional — but needed a follow-up prompt for edge cases.
 | Cost | $10–19/mo | **FREE** |
 | Privacy | External servers | **Your machine** |
 
+<img width="1280" height="1216" alt="image" src="https://github.com/user-attachments/assets/d169eb2e-f3a9-4b9e-b6a9-d577056561db" />
+
 ---
 
 ## 🏗️ How It All Works Together
