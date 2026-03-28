@@ -1,6 +1,24 @@
 # 🐳 Running AI Locally with Docker Desktop
 ### A step-by-step guide to replacing GitHub Copilot with a free, private, GPU-accelerated local AI
 
+> 📝 Also published on [dev.to](https://dev.to/riju005/i-tried-replacing-github-copilot-with-local-ai-heres-what-happened-docker-gpu-5b44)
+
+---
+
+## ⚠️ Reality Check First
+
+This is NOT a perfect replacement for GitHub Copilot.
+
+Cloud models (GPT-4/5-level) are still better at reasoning, large codebases, and consistency.
+
+But for **most day-to-day coding tasks**, a local setup is fast enough, smart enough, and WAY more private. Think of this as a **practical alternative**, not a 1:1 replacement.
+
+### ❌ When You Should NOT Use This
+- Working on large enterprise codebases
+- Need best-in-class reasoning (GPT-4 level)
+- Want zero setup / plug-and-play
+- Low-end hardware (<16GB RAM, no GPU)
+
 ---
 
 ## 🧠 Why Run AI Locally?
@@ -16,7 +34,7 @@
 
 ## 🖥️ System Requirements
 
-> This guide is optimized for the following setup. Adjust model size based on your hardware.
+> This guide is based on my machine. Adjust model size based on your hardware.
 
 | Component | Spec | Role in AI Inference |
 |---|---|---|
@@ -27,6 +45,15 @@
 | 💾 RAM | 32GB | Loads model weights |
 | 🗄️ Storage | 1TB SSD | Stores model files |
 | 🪟 OS | Windows 11 Home | — |
+
+### Minimum Setup Recommendation
+
+| Hardware | What to Expect |
+|---|---|
+| No GPU | Works, but slow (~2–5s responses) |
+| 8GB RAM | Very limited models only |
+| 16GB RAM | Usable |
+| 32GB + GPU | 🔥 Ideal |
 
 ---
 
@@ -44,16 +71,16 @@ Download from: [https://www.docker.com/products/docker-desktop](https://www.dock
 
 Before pulling a model, you need to understand three key concepts:
 
-### 🔢 Parameters
-> The "brain size" of an AI model. More parameters = smarter model, but also larger file size and more RAM needed.
+### 🔢 Parameters = Brain Size
+> More parameters = smarter model, but larger file size and more RAM needed.
 ```
 7B  = 7 Billion parameters  → Good for most coding tasks ✅
 30B = 30 Billion parameters → Needs 16GB+ VRAM
 70B = 70 Billion parameters → Needs very high-end hardware
 ```
 
-### 📦 Quantization
-> Compression of the model. Like image compression — smaller file, slight quality trade-off.
+### 📦 Quantization = Compression
+> Like image compression — smaller file, slight quality trade-off.
 ```
 F16  → Full precision, 16 bits/parameter → Largest, best quality
 Q8_0 → 8 bits/parameter                 → Good balance
@@ -61,7 +88,7 @@ Q4_0 → 4 bits/parameter                 → ~4x smaller, great for most tasks 
 Q2   → 2 bits/parameter                 → Smallest, noticeable quality loss
 ```
 
-### 💡 RAM vs VRAM Loading Rule
+### 💡 The Golden Rule — RAM vs VRAM
 ```
 Model fits in VRAM (6GB)?  → Loads on GPU  ⚡ Super fast!
 Model too big for VRAM?    → Overflows to RAM 🐢 Slower
@@ -72,7 +99,7 @@ Model too big for RAM?     → ❌ Won't run at all
 
 ## 🏆 Step 3 — Pull the Right Model
 
-### Our Pick: `qwen2.5:7B-Q4_0`
+### Recommended: `qwen2.5:7B-Q4_0`
 
 | Property | Value | Why It Matters |
 |---|---|---|
@@ -88,13 +115,15 @@ Model too big for RAM?     → ❌ Won't run at all
 3. Search for `qwen2.5`
 4. Find `qwen2.5:7B-Q4_0` and click **Pull**
 
-![Models Tab](https://placeholder/models)
+<img width="1668" height="857" alt="Docker Models search showing qwen2.5 variants" src="https://github.com/user-attachments/assets/1e9118bf-4f88-4f58-8548-ba7565994153" />
 
 > ⏳ This will download ~4GB. Make sure you have a good internet connection.
 
 ---
 
 ## ⚡ Step 4 — Enable GPU-Accelerated Inference
+
+**Most guides miss this step entirely.**
 
 By default, Docker Model Runner uses CPU only. Enabling GPU support gives **10x faster** responses!
 
@@ -122,25 +151,30 @@ http://localhost:12434/engines/v1/models
 You should see a JSON response like:
 ```json
 {
+  "object": "list",
   "data": [
     {
-      "id": "ai/qwen2.5:7B-Q4_0",
-      "object": "model"
+      "id": "docker.io/ai/qwen2.5:7B-Q4_0",
+      "object": "model",
+      "created": 1745580818,
+      "owned_by": "docker"
     }
   ]
 }
 ```
 
-✅ If you see this — your model is running and accessible via API!
-
 ### Verify GPU Usage
 
 Go to **Docker Desktop → Models → Requests tab** after sending a prompt.
 
-```
-Duration: ~273ms  ← GPU is working! ⚡
-Duration: ~3000ms ← CPU only 🐢
-```
+<img width="1662" height="515" alt="Docker Models Requests tab showing 273ms response time" src="https://github.com/user-attachments/assets/091e9e33-7806-4612-ad52-9c906e708ff3" />
+
+| Mode | Speed |
+|---|---|
+| GPU ⚡ | ~273ms |
+| CPU 🐢 | ~3000ms |
+
+**That's a 10x speedup from one checkbox.**
 
 ---
 
@@ -151,7 +185,7 @@ Docker Models exposes a **local OpenAI-compatible REST API** at:
 http://localhost:12434/engines/v1
 ```
 
-This means ANY tool that supports OpenAI's API can use your local model — just change the URL!
+> Key insight: **any tool that supports OpenAI's API works here** — just change the URL from OpenAI's server to localhost.
 
 ### Install Continue.dev Extension
 
@@ -181,11 +215,11 @@ models:
     apiKey: docker
 ```
 
-> 💡 **Why `provider: openai`?** Docker's API is OpenAI-compatible — it speaks the same language, just at a different address (localhost instead of the cloud)!
+> 💡 **Why `provider: openai`?** Docker's API is OpenAI-compatible — same language, different address.
 
-> 💡 **Why `apiKey: docker`?** It's just a placeholder — no real authentication is needed for localhost APIs.
+> 💡 **Why `apiKey: docker`?** Just a placeholder — no real authentication needed for localhost.
 
-### Fix Windows PowerShell Execution Policy (if needed)
+### Windows PowerShell Fix (if needed)
 
 If you see script execution errors, run this in **PowerShell as Administrator**:
 
@@ -195,7 +229,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ### Reload and Test
 
-1. Click **Reload** in the Continue panel (right sidebar in VS Code)
+1. Click **Reload** in the Continue panel
 2. Select **Qwen2.5 Coder Local** from the model dropdown
 3. Ask it something:
 
@@ -203,7 +237,53 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Can you explain what a Docker volume is?
 ```
 
-✅ If it responds — **you're done!** You now have a free, private, GPU-accelerated AI coding assistant running 100% on your machine! 🎉
+<img width="1280" height="1216" alt="Continue.dev working with local Qwen model in VS Code" src="https://github.com/user-attachments/assets/d169eb2e-f3a9-4b9e-b6a9-d577056561db" />
+
+✅ If it responds — **you're done!**
+
+---
+
+## 🧪 Real Comparison — Copilot vs Local AI
+
+### Prompt tested:
+```
+Write a Django REST Framework viewset for a User model
+with JWT authentication and permission classes
+```
+
+### GitHub Copilot:
+Clean, complete, production-ready. ~60 lines, zero follow-up needed.
+
+### Local Qwen 7B:
+```python
+from rest_framework import viewsets, permissions
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .models import User
+from .serializers import UserSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Users can only see their own data
+        return User.objects.filter(id=self.request.user.id)
+```
+
+Solid and functional — but needed a follow-up prompt for edge cases.
+
+### Verdict:
+
+| Feature | Copilot | Local Qwen 7B |
+|---|---|---|
+| Speed | Fast | Fast (GPU ⚡) |
+| Boilerplate | Excellent | Good |
+| Reasoning | Strong | Moderate |
+| Multi-file context | Better | Limited |
+| Cost | $10–19/mo | **FREE** |
+| Privacy | External servers | **Your machine** |
 
 ---
 
@@ -233,6 +313,15 @@ Can you explain what a Docker volume is?
 
 No internet. No API costs. No data leaks.
 ```
+
+---
+
+## ⚠️ Where This Falls Short
+
+- ❌ Not as smart as GPT-4-level models
+- ❌ Limited context window (struggles with large codebases)
+- ❌ Needs decent hardware for best results
+- ❌ Setup takes 30–60 minutes vs just paying for Copilot
 
 ---
 
@@ -275,4 +364,10 @@ curl http://localhost:12434/engines/v1/models
 
 ---
 
-*📅 Guide created: March 2026 | 🐳 Docker Desktop with AI features (Beta)*
+## 🚀 What's Next?
+
+This is just the foundation. Docker's **MCP Toolkit** can let your local AI actually *act* — read your codebase, modify files, understand requirements. That's a full agent setup — coming in Part 2.
+
+---
+
+*📅 Guide created: March 2026 | 🐳 Docker Desktop with AI features*
