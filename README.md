@@ -29,6 +29,14 @@ Practical Docker guides beyond the basics — from containers to local AI infere
 
 ---
 
+### 🤖 AI Learning
+13 hands-on projects across ML, Deep Learning, and GenAI Engineering.
+Built as part of a structured self-taught AI Engineer roadmap.
+
+| Guide | Description | Level |
+|---|---|---|
+| [📍 View Full Roadmap](./ai-notes/AI_LEARNING_ROADMAP.md) | Complete 3-phase roadmap with progress tracking | All levels |
+
 ### 💡 TIL — Today I Learned
 Short, punchy learnings from daily development work.
 
@@ -41,7 +49,6 @@ Short, punchy learnings from daily development work.
 ### 🔜 Coming Soon
 ```
 django-notes/        → DRF patterns, ORM deep dives, deployment tips
-ai-experiments/      → Building with local LLMs, MCP integrations
 system-design/       → Architecture decisions and trade-offs
 ```
 
