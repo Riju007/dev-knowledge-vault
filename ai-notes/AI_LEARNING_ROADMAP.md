@@ -34,7 +34,10 @@
 
 ## 🗺️ The Roadmap — 3 Phases, ~6–7 Months
 
-### Reference: roadmap.sh/ai-engineer
+### Reference: [roadmap.sh/ai-engineer](https://roadmap.sh/ai-engineer)
+
+
+### Repository: [ai-engineer-journey](https://github.com/Riju007/ai-engineer-journey)
 
 ---
 
@@ -137,16 +140,16 @@
 ```
 knowledge-vault/
 │
-├── README.md                        ✅ Done
-├── AI_LEARNING_ROADMAP.md           ← This file
+├── README.md
 │
-├── docker-notes/                    ✅ Has content
+├── docker-notes/
 │   └── local-ai-setup-guide.md
 │
-├── til/                             ✅ Has content
+├── til/
 │   └── 2026-03-28-docker-models-tcp.md
 │
-├── ai-learning/                     ← 🆕 New section
+├── ai-learning/
+    ├── AI_LEARNING_ROADMAP.md
 │   ├── phase-1-ml-foundations/
 │   │   ├── notes/
 │   │   └── projects/
